@@ -7,7 +7,7 @@
  * ReadYandexDirectClass.php
  * @author Шакиров
  * @version 1.0
- * @created 29-янв-2015 14:33:57
+ * @created 29-янв-2015 19:03:31
  */
 class ReadYandexDirectClass
 {
@@ -82,11 +82,13 @@ class ReadYandexDirectClass
 		$context = stream_context_create($opts);
 	
 		# отправляем запрос и получаем ответ от сервера
+		//if ($_GET['mode']=='sandbox') 
 		$result = file_get_contents('https://api-sandbox.direct.yandex.ru/v4/json/', 0, $context);
-		 
+		//else
+		//	$result = file_get_contents('https://api.direct.yandex.ru/v4/json/', 0, $context);
+	
 		# вывод результата
 		print_r($result);
-	
 	}
 
 	/**
@@ -176,7 +178,7 @@ class ReadYandexDirectClass
 				    //echo $result->access_token;
 				    $db_query_write = sprintf($db_query_write,$result->access_token);
 					mysql_query($db_query_write);
-					echo "token in DB updated<\br>";
+					echo "token in DB updated</br>";
 					return 1;
 				  }
 				else
