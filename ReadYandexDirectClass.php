@@ -7,7 +7,7 @@
  * ReadYandexDirectClass.php
  * @author Шакиров
  * @version 1.0
- * @created 29-янв-2015 19:03:31
+ * @created 30-янв-2015 17:14:49
  */
 class ReadYandexDirectClass
 {
@@ -20,7 +20,7 @@ class ReadYandexDirectClass
 	 * ключевые слова, значения - ассоциативные массивы,  где ключи - параметры
 	 * ключевых слов, значения - значения параметров
 	 */
-	private $campaigns;
+	public $campaigns;
 	private $requestData;
 
 	public function requestCampaigns()
@@ -82,13 +82,15 @@ class ReadYandexDirectClass
 		$context = stream_context_create($opts);
 	
 		# отправляем запрос и получаем ответ от сервера
-		//if ($_GET['mode']=='sandbox') 
-		$result = file_get_contents('https://api-sandbox.direct.yandex.ru/v4/json/', 0, $context);
-		//else
-		//	$result = file_get_contents('https://api.direct.yandex.ru/v4/json/', 0, $context);
+		if ($_GET['mode']=='sandbox') {
+			$api_addr = 'https://api-sandbox.direct.yandex.ru/v4/json/';
+			}
+		else {
+			$api_addr = 'https://api.direct.yandex.ru/v4/json/';
+			}
 	
-		# вывод результата
-		print_r($result);
+		$this->campaigns = json_decode(file_get_contents($api_addr, 0, $context),true);
+		return 1;
 	}
 
 	/**
@@ -178,7 +180,8 @@ class ReadYandexDirectClass
 				    //echo $result->access_token;
 				    $db_query_write = sprintf($db_query_write,$result->access_token);
 					mysql_query($db_query_write);
-					echo "token in DB updated</br>";
+					$this->access_token = $result->access_token;
+					echo "Token have been updated in DB</br>";
 					return 1;
 				  }
 				else
